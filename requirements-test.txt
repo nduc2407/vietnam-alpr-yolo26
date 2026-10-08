@@ -1,0 +1,10 @@
+# Chi can cho test/CI (khong keo torch)
+pytest>=8
+httpx>=0.27
+ruff>=0.5
+fastapi>=0.110
+python-multipart>=0.0.9
+opencv-python-headless>=4.9
+numpy>=1.26
+pyyaml>=6
+pillow>=10

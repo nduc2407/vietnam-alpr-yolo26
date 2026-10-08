@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.pt
+data/*
+!data/sample/
+!data/own_manifest.csv
+experiments/
+out/

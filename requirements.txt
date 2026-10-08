@@ -1,0 +1,18 @@
+# Moi truong day du de train + chay local.
+# GPU cho YOLO: cai torch ban CUDA TRUOC (xem README). OCR Paddle chay CPU (OCR_DEVICE=cpu) nen chi can ban paddlepaddle CPU.
+ultralytics>=8.4
+paddlepaddle>=3.0
+paddleocr>=3.0
+numpy
+pyyaml
+pillow
+matplotlib
+fastapi
+uvicorn[standard]
+python-multipart
+roboflow
+jupyter
+ipykernel
+pytest
+httpx
+ruff
