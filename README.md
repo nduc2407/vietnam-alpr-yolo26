@@ -4,26 +4,6 @@ Luồng hệ thống: **dữ liệu (Roboflow API + ảnh nhóm tự chụp/gán
 
 Dataset gốc: <https://universe.roboflow.com/thanh-tung-phan/biensoxe-o1lhe> (CC BY 4.0, 1 lớp `BienSoXe`).
 
-## Đối chiếu yêu cầu hồ sơ
-
-| Yêu cầu | Trạng thái trong repo | Việc nhóm còn phải làm |
-|---|---|---|
-| Dữ liệu tự gán nhãn của nhóm | Có công cụ `python -m src merge` + `data/own_manifest.csv` ghi nguồn gốc ([docs/DATA.md](docs/DATA.md)) | **Chụp và gán nhãn ảnh của nhóm**, điền thống kê vào DATA.md |
-| Suy luận | `python -m src infer`, API `/predict` | – |
-| Đo P / R / mAP bằng số liệu | `python -m src eval` → `experiments/metrics_*.json` | **Chạy sau khi train**, rồi `python -m src report` |
-| Tiền xử lý ảnh | Ảnh đầu vào: đổi kênh, resize giữ tỉ lệ, CLAHE tùy chọn (`PREPROCESS_CLAHE=1`, mặc định tắt, đo bằng `sweep --enhance`). Ảnh biển đã cắt: **chỉnh nghiêng (deskew), phóng to, khử nhiễu giữ biên, CLAHE, làm nét** (`src/inference/preprocess.py`). Đo tác dụng bằng `python -m src ocr-eval` | Điền chuỗi biển số thật cho ~100 ảnh để chạy `ocr-eval` |
-| Ngưỡng tin cậy và NMS | `python -m src sweep` quét conf và NMS (`end2end=False`) so với NMS-free | **Chạy và ghi nhận ngưỡng chọn** |
-| Độ trễ và FPS | `python -m src bench --full` | **Chạy trên máy dùng để demo** |
-| Dịch vụ gọi được | FastAPI + Docker ([docs/API.md](docs/API.md)) | – |
-| Git (nhánh, PR, review chéo) | Mẫu PR + hướng dẫn ([docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)) | **Thực hiện trên GitHub** (tạo repo, bật branch protection) |
-| Docker / một lệnh / dữ liệu mẫu | `docker compose up --build`, `data/sample` (ảnh tổng hợp) | Thử build trên máy có Docker |
-| Quản lý bí mật | `.env` + `.gitignore` + test chặn lộ key | **Xoay (rotate) các API key đã lộ** |
-| Kiểm thử | `pytest` (30 test: dữ liệu, OCR, tiền xử lý, ngưỡng, API) | – |
-| CI | `.github/workflows/ci.yml` (lint, test, build Docker, pip-audit) | Đẩy lên GitHub để chạy |
-| Bảo mật OWASP | [docs/SECURITY.md](docs/SECURITY.md) | – |
-| Tài liệu | README này + docs/ + Swagger `/docs` | – |
-| AI Disclosure | [AI_DISCLOSURE.md](AI_DISCLOSURE.md) | **Điền trung thực** phần nhóm đã kiểm tra |
-
 
 ## Chạy local (Windows PowerShell)
 
