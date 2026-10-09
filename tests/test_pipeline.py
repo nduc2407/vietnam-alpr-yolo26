@@ -16,8 +16,8 @@ class FakeDetector:
 
 
 class FakeOCR:
-    def read(self, crop):
-        return "59X112345", 0.8
+    def read_detailed(self, crop):
+        return "59X112345", 0.8, True
 
 
 def test_bbox_is_scaled_back_to_original_image():

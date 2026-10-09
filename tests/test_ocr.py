@@ -53,3 +53,22 @@ def test_preprocess_toggle_changes_input_size():
 
 def test_empty_crop():
     assert PlateOCR(recognizer=lambda i: ("x", 1.0)).read(np.zeros((0, 0, 3), np.uint8)) == ("", 0.0)
+
+def test_format_plate_one_line_and_two_line():
+    assert format_plate("59X112345", True) == "59-X1 123.45"
+    assert format_plate("51F12345", False) == "51F-123.45"
+    assert format_plate("51F12345") == "51F-123.45"
+    assert format_plate("51A1234") == "51A-1234"
+    assert format_plate("29LD12345") == "29LD-123.45"
+    assert format_plate("ABC") == "ABC"
+
+
+def test_ambiguous_ratio_picks_valid_reading():
+    """Ti le mo ho (vd bien nghieng): thu ca 1 dong va 2 dong, chon cach doc ra chuoi hop le."""
+    def fake(img):
+        # anh nguyen (cao ~100) -> doc dung; nua anh (cao ~50) -> doc sai
+        return ("51F12345", 0.8) if img.shape[0] >= 90 else ("XX", 0.9)
+
+    crop = np.full((100, 220, 3), 200, np.uint8)       # ti le 2.2 -> mo ho
+    text, conf, two = PlateOCR(recognizer=fake).read_detailed(crop)
+    assert text == "51F12345" and two is False

@@ -45,8 +45,8 @@ class ALPRPipeline:
             if encode_crop and det.crop_base64:
                 item["crop_base64"] = det.crop_base64
             if self.ocr:
-                text, c = self.ocr.read(det.cropped_image)
-                item.update(plate=text, plate_formatted=format_plate(text),
+                text, c, two = self.ocr.read_detailed(det.cropped_image)
+                item.update(plate=text, plate_formatted=format_plate(text, two),
                             ocr_conf=round(c, 4), valid=is_valid_plate(text))
             plates.append(item)
         t3 = time.perf_counter()
