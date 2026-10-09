@@ -10,6 +10,7 @@ matplotlib
 fastapi
 uvicorn[standard]
 python-multipart
+streamlit
 roboflow
 jupyter
 ipykernel

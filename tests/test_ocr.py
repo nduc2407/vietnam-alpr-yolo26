@@ -56,6 +56,7 @@ def test_empty_crop():
 
 def test_format_plate_one_line_and_two_line():
     assert format_plate("59X112345", True) == "59-X1 123.45"
+    assert format_plate("51L18297", True) == "51L-182.97"
     assert format_plate("51F12345", False) == "51F-123.45"
     assert format_plate("51F12345") == "51F-123.45"
     assert format_plate("51A1234") == "51A-1234"
