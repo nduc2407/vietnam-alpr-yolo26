@@ -10,6 +10,7 @@ Lenh:
   bench      do do tre / FPS (them --full de gom OCR)
   infer      chay ALPR tren anh / thu muc / webcam
   serve      chay REST API (FastAPI)
+  ui         chay Web UI (Streamlit)
 Xem tham so cua tung lenh: python -m src <lenh> --help
 """
 import sys
@@ -38,6 +39,14 @@ def serve(argv):
     uvicorn.run("src.backend.app:app", host=a.host, port=a.port)
 
 
+def run_ui(argv):
+    import subprocess
+    from pathlib import Path
+    app_path = Path(__file__).resolve().parent / "ui" / "app.py"
+    cmd = [sys.executable, "-m", "streamlit", "run", str(app_path)] + argv
+    subprocess.run(cmd)
+
+
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
         print(__doc__)
@@ -45,6 +54,8 @@ def main():
     cmd, rest = sys.argv[1], sys.argv[2:]
     if cmd == "serve":
         return serve(rest)
+    if cmd == "ui":
+        return run_ui(rest)
     if cmd not in COMMANDS:
         print(f"Lenh khong hop le: {cmd}\n{__doc__}")
         sys.exit(1)

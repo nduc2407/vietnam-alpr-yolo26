@@ -38,13 +38,44 @@ def enhance_contrast(image: np.ndarray, clip: float = 2.0, grid: int = 8) -> np.
     return cv2.cvtColor(cv2.merge((l_ch, a_ch, b_ch)), cv2.COLOR_LAB2BGR)
 
 
+def auto_adaptive_lighting(image: np.ndarray) -> np.ndarray:
+    """Tu dong can bang sang thich ung:
+    - Anh toi (L < 85): Gamma correction (<1.0) + CLAHE de kich sang ro chu
+    - Anh choi/sang (L > 175): Gamma correction (>1.0) de giu net chu dam
+    - Anh binh thuong: CLAHE nhe de giu nguyen chi tiet tu nhien.
+    """
+    image = to_bgr(image)
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+    l_ch, a_ch, b_ch = cv2.split(lab)
+    mean_l = float(np.mean(l_ch))
+
+    if mean_l < 85:
+        # Anh toi -> kich sang
+        gamma = max(0.45, mean_l / 110.0)
+        inv_gamma = 1.0 / gamma
+        table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in range(256)]).astype("uint8")
+        l_ch = cv2.LUT(l_ch, table)
+        l_ch = cv2.createCLAHE(clipLimit=2.2, tileGridSize=(8, 8)).apply(l_ch)
+    elif mean_l > 175:
+        # Anh choi / nguoc sang -> giam sang de lay lai do tuong phan
+        gamma = min(1.6, mean_l / 140.0)
+        inv_gamma = 1.0 / gamma
+        table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in range(256)]).astype("uint8")
+        l_ch = cv2.LUT(l_ch, table)
+        l_ch = cv2.createCLAHE(clipLimit=1.8, tileGridSize=(8, 8)).apply(l_ch)
+    else:
+        l_ch = cv2.createCLAHE(clipLimit=1.5, tileGridSize=(8, 8)).apply(l_ch)
+
+    return cv2.cvtColor(cv2.merge((l_ch, a_ch, b_ch)), cv2.COLOR_LAB2BGR)
+
+
 # ---------------------------------------------------------------- uoc luong goc nghieng
 def _hough_angle(gray: np.ndarray, max_angle: float) -> Optional[float]:
     """Goc nghieng (do) tu cac duong gan nam ngang; None neu khong tim thay duong nao.
     Duong khi duong chay xuong ve ben phai (he toa do anh)."""
     w = gray.shape[1]
     edges = cv2.Canny(cv2.GaussianBlur(gray, (3, 3), 0), 50, 150)
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=30, minLineLength=max(10, int(0.4 * w)), maxLineGap=10)
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=25, minLineLength=max(8, int(0.25 * w)), maxLineGap=10)
     if lines is None:
         return None
     angles = []
@@ -150,20 +181,25 @@ def resize_max(image: np.ndarray, max_side: int) -> Tuple[np.ndarray, float]:
     return cv2.resize(image, (round(w * s), round(h * s)), interpolation=cv2.INTER_AREA), s
 
 
-def preprocess(image: np.ndarray, max_side: int = 1280, enhance: bool = False):
+def preprocess(image: np.ndarray, max_side: int = 1280, enhance: Union[bool, str] = False):
     """Tra ve (anh_da_xu_ly, scale) voi scale = kich_thuoc_moi / kich_thuoc_goc."""
     out, scale = resize_max(to_bgr(image), max_side)
-    return (enhance_contrast(out) if enhance else out), scale
+    if enhance:
+        out = auto_adaptive_lighting(out)
+    return out, scale
 
 
-def prepare_plate_crop(crop: np.ndarray, target_h: int = 96, do_deskew: bool = True,
-                       denoise: bool = True, sharpen: bool = True) -> np.ndarray:
-    """Hinh hoc (phong to + nan nghieng) -> khu nhieu giu bien -> CLAHE -> lam net. Tra ve BGR 3 kenh."""
+def prepare_plate_crop(crop: np.ndarray, target_h: int = 110, do_deskew: bool = True,
+                       denoise: bool = True, sharpen: bool = True, add_border: bool = True) -> np.ndarray:
+    """Hinh hoc (phong to + nan nghieng) -> can bang sang thich ung -> padding vien -> khu nhieu -> lam net. Tra ve BGR 3 kenh."""
     img = ImagePreprocessor.enhance_roi(crop, target_h) if do_deskew else to_bgr(crop)
+    img = auto_adaptive_lighting(img)
+    if add_border:
+        # Them padding vien 6px tren duoi va 10px trai phai de ky tu sat viền khong bi mat net
+        img = cv2.copyMakeBorder(img, 6, 6, 10, 10, cv2.BORDER_REPLICATE)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     if denoise:
-        gray = cv2.bilateralFilter(gray, 5, 35, 35)
-    gray = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(gray)
+        gray = cv2.bilateralFilter(gray, 5, 30, 30)
     if sharpen:
-        gray = cv2.addWeighted(gray, 1.5, cv2.GaussianBlur(gray, (0, 0), 1.2), -0.5, 0)
+        gray = cv2.addWeighted(gray, 1.4, cv2.GaussianBlur(gray, (0, 0), 1.0), -0.4, 0)
     return cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
