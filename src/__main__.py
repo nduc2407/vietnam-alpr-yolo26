@@ -8,8 +8,6 @@ Lenh:
   ocr-eval   do chinh xac OCR (exact-match, CER) co/khong tien xu ly
   sweep      quet nguong conf + NMS (precision/recall/F1)
   bench      do do tre / FPS (them --full de gom OCR)
-  report     gom so lieu thuc nghiem -> docs/RESULTS.md
-  merge      gop anh bien so nhom tu chup + tu gan nhan vao dataset
   infer      chay ALPR tren anh / thu muc / webcam
   serve      chay REST API (FastAPI)
 Xem tham so cua tung lenh: python -m src <lenh> --help
@@ -25,7 +23,6 @@ COMMANDS = {
     "sweep": "src.evaluation.sweep",
     "bench": "src.evaluation.benchmark",
     "report": "src.evaluation.report",
-    "merge": "src.data.merge",
     "infer": "src.inference.pipeline",
 }
 

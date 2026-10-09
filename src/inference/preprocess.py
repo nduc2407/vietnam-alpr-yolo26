@@ -4,9 +4,8 @@ Hai tang:
   1) Anh dau vao : decode, doi kenh, resize giu ti le, CLAHE (tuy chon)
   2) Anh bien cat: phong to + nan nghieng (enhance_roi) roi khu nhieu/CLAHE/lam net (prepare_plate_crop)
 
-Khac ban goc (da do bang thuc nghiem, xem tests/test_preprocess.py):
-  - CLAHE tao moi moi lan goi: doi tuong cv2.CLAHE dung chung KHONG an toan da luong
-    (FastAPI chay endpoint dong bo tren threadpool) -> ket qua sai ~14% khi 8 luong goi cung luc.
+
+ 
   - auto_deskew dung Hough tren cac duong thang ngang (vien/duong chu) lam chinh, minAreaRect chi la du phong:
     minAreaRect tren nhi phan Otsu cho goc 0 voi anh cat tu YOLO (bbox chua nen toi o 4 goc).
   - max_angle mac dinh 20 do (45 qua rong: uoc luong sai se lam hong anh bien).
