@@ -1,11 +1,4 @@
-"""OCR bien so xe Viet Nam bang PaddleOCR (PP-OCRv5) + hau xu ly theo dinh dang bien so.
-
-
-Bien moi truong:
-    OCR_MODEL       ten model nhan dang (mac dinh en_PP-OCRv5_mobile_rec)
-    OCR_DEVICE      cpu | gpu:0 (mac dinh cpu - on dinh, tranh xung dot CUDA voi PyTorch)
-    OCR_PREPROCESS  1/0 bat tat tien xu ly anh bien (mac dinh 1)
-"""
+"""Nhận dạng ký tự biển số xe (OCR) và hậu xử lý định dạng biển số Việt Nam."""
 import os
 import re
 
@@ -36,13 +29,13 @@ def normalize_plate(text: str) -> str:
     return "".join(chars)
 
 
-def format_plate(s: str, two_line: bool | None = None) -> str:
+def format_plate(s: str, two_line: bool | None = None, line2_len: int | None = None) -> str:
     """Dinh dang bien so VN:
     - O to 5 so (1 dong hoac 2 dong vuong): 51L18297 -> 51L-182.97 ; 51F12345 -> 51F-123.45
     - O to 4 so cu: 51A1234 -> 51A-1234
     - O to lien doanh/dac biet: 29LD12345 -> 29LD-123.45
     - Xe may 5 so (2 dong): 15P103737 -> 15-P1 037.37 ; 59X112345 -> 59-X1 123.45
-    - Xe may 4 so cu: 59X11234 -> 59-X1 1234
+    - Xe may 4 so cu: 59X11234 -> 59-X1 1234 ; 54L19999 -> 54-L1 9999
     """
     if not PLATE_RE.match(s):
         return s
@@ -54,22 +47,26 @@ def format_plate(s: str, two_line: bool | None = None) -> str:
         num_str = f"{num[:3]}.{num[3:]}" if len(num) == 5 else num
         return f"{prov}{series}-{num_str}"
 
-    # 2. O to 5 so: 1 chu cai + 5 so (Tong rest co do dai 6, vd: L18297, F12345)
+    # 2. Xe may 4 so cu (2 dong): khi dong 2 ro rang co 4 so
+    if line2_len == 4 and len(rest) == 6 and rest[0].isalpha() and rest[1:].isdigit():
+        return f"{prov}-{rest[:2]} {rest[2:]}"
+
+    # 3. O to 5 so: 1 chu cai + 5 so (Tong rest co do dai 6, vd: L18297, F12345)
     if len(rest) == 6 and rest[0].isalpha() and rest[1:].isdigit():
         series, num = rest[0], rest[1:]
         return f"{prov}{series}-{num[:3]}.{num[3:]}"
 
-    # 3. Xe may 5 so: 1 chu cai + 1 so/chu + 5 so (Tong rest co do dai 7, vd: P103737, X112345)
+    # 4. Xe may 5 so: 1 chu cai + 1 so/chu + 5 so (Tong rest co do dai 7, vd: P103737, X112345)
     if len(rest) == 7 and rest[0].isalpha() and rest[2:].isdigit():
         series, num = rest[:2], rest[2:]
         return f"{prov}-{series} {num[:3]}.{num[3:]}"
 
-    # 4. O to 4 so cu: 1 chu cai + 4 so (Tong rest co do dai 5, vd: A1234)
+    # 5. O to 4 so cu: 1 chu cai + 4 so (Tong rest co do dai 5, vd: A1234)
     if len(rest) == 5 and rest[0].isalpha() and rest[1:].isdigit():
         series, num = rest[0], rest[1:]
         return f"{prov}{series}-{num}"
 
-    # 5. Xe may 4 so cu (vd: 59X11234 -> 59-X1 1234)
+    # 6. Xe may 4 so cu (vd: 59X11234 -> 59-X1 1234)
     if len(rest) == 6 and rest[0].isalpha() and rest[2:].isdigit():
         if two_line is True or (two_line is None and rest[1].isdigit()):
             series, num = rest[:2], rest[2:]
@@ -85,6 +82,29 @@ def is_valid_plate(s: str) -> bool:
     return bool(PLATE_RE.match(s))
 
 
+def find_horizontal_split(img: np.ndarray) -> int:
+    """Tim vi tri cat toi uu giua 2 dong dua tren mat do diem anh net chu (Horizontal Projection)."""
+    h, w = img.shape[:2]
+    if h < 20:
+        return int(round(h * 0.50))
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    # Loai bo vien trai/phai tranh vien inox
+    row_sums = np.sum(thresh[:, int(w * 0.05):int(w * 0.95)] == 255, axis=1)
+
+    y_start = int(0.35 * h)
+    y_end = int(0.58 * h)
+    if y_end <= y_start:
+        return int(round(h * 0.50))
+
+    mid_zone = row_sums[y_start:y_end]
+    if np.max(mid_zone) == np.min(mid_zone):
+        return int(round(h * 0.50))
+
+    min_idx = int(np.argmin(mid_zone))
+    return y_start + min_idx
+
+
 class PlateOCR:
     def __init__(self, model_name=None, device=None, preprocess=None, recognizer=None):
         """recognizer: ham (anh_bgr) -> (text, score); dung de test hoac thay backend."""
@@ -95,6 +115,8 @@ class PlateOCR:
         self.preprocess = preprocess
         self._recognizer = recognizer
         self._model = None
+        self.last_line2_len = None
+        self._temp_line2_len = None
 
     def load(self):
         """Nap model (tai ve lan dau). Goi som de request dau tien khong bi cham."""
@@ -117,16 +139,23 @@ class PlateOCR:
     def _read_lines(self, img: np.ndarray, two_lines: bool) -> tuple[str, float]:
         if two_lines:
             h = img.shape[0]
-            top_cut = int(round(h * 0.54))
-            bot_cut = int(round(h * 0.44))
+            split_y = find_horizontal_split(img)
+            # Tao vung chong lan rat nho (3% chieu cao) tranh cat lech giua 2 dong
+            margin = max(2, int(round(h * 0.03)))
+            top_cut = min(h, split_y + margin)
+            bot_cut = max(0, split_y - margin)
             (t1, c1) = self._recognize(img[:top_cut])
             (t2, c2) = self._recognize(img[bot_cut:])
+            n2 = re.sub(r"[^0-9]", "", t2)
+            self._temp_line2_len = len(n2)
             return t1 + t2, (c1 + c2) / 2
+        self._temp_line2_len = None
         return self._recognize(img)
 
     def read_detailed(self, crop: np.ndarray) -> tuple[str, float, bool]:
         """Tra ve (text_da_chuan_hoa, do_tin_cay, la_bien_2_dong)."""
         if crop is None or crop.size == 0:
+            self.last_line2_len = None
             return "", 0.0, False
         img = prepare_plate_crop(crop) if self.preprocess else crop
         h, w = img.shape[:2]
@@ -138,10 +167,12 @@ class PlateOCR:
         else:
             options = [False, True]    # mo ho (vd bien nghieng): thu ca hai
         results = []
+        line2_lens = {}
         for two in options:
             text, conf = self._read_lines(img, two)
             norm = normalize_plate(text)
             results.append((is_valid_plate(norm), conf, norm, two))
+            line2_lens[two] = self._temp_line2_len
         best_valid, best_conf, best_norm, best_two = max(results)   # uu tien chuoi hop le, roi den do tin cay
 
         # TTA Fallback: Neu ket qua chua hop le hoac do goc chup chieu sau khien ky tu bi ep sat / thieu so
@@ -153,8 +184,10 @@ class PlateOCR:
                 valid_s = is_valid_plate(norm_s)
                 if (valid_s and not best_valid) or (valid_s and len(norm_s) > len(best_norm)):
                     best_valid, best_conf, best_norm, best_two = valid_s, conf_s, norm_s, two
+                    line2_lens[two] = self._temp_line2_len
                     break
 
+        self.last_line2_len = line2_lens.get(best_two)
         return best_norm, best_conf, best_two
 
     def read(self, crop: np.ndarray) -> tuple[str, float]:

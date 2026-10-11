@@ -1,10 +1,4 @@
-"""Pipeline ALPR: tien xu ly -> detect -> crop -> OCR.
-
-Chay:
-    python -m src infer --source path/anh.jpg --save out
-    python -m src infer --source folder/ --save out
-    python -m src infer --source 0          # webcam
-"""
+"""Pipeline ALPR: tiền xử lý ảnh -> phát hiện biển số -> crop -> OCR."""
 import argparse
 import os
 import time
@@ -24,8 +18,7 @@ IMG_EXT = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 class ALPRPipeline:
     def __init__(self, weights=BEST_MODEL, conf=CONF_THRES, iou=IOU_THRES, use_ocr=True,
                  enhance=None, max_side=1280, end2end=True, detector=None, ocr=None):
-        """enhance=None -> doc bien moi truong PREPROCESS_CLAHE (mac dinh tat: model train khong dung CLAHE,
-        chi bat khi `python -m src sweep --enhance` cho thay co loi)."""
+        """Khởi tạo pipeline ALPR hoàn chỉnh."""
         self.detector = detector or PlateDetector(weights, conf=conf, iou=iou, end2end=end2end)
         self.ocr = ocr if ocr is not None else (PlateOCR().load() if use_ocr else None)
         if enhance is None:
@@ -46,7 +39,8 @@ class ALPRPipeline:
                 item["crop_base64"] = det.crop_base64
             if self.ocr:
                 text, c, two = self.ocr.read_detailed(det.cropped_image)
-                item.update(plate=text, plate_formatted=format_plate(text, two),
+                line2_len = getattr(self.ocr, "last_line2_len", None)
+                item.update(plate=text, plate_formatted=format_plate(text, two, line2_len=line2_len),
                             ocr_conf=round(c, 4), valid=is_valid_plate(text))
             plates.append(item)
         t3 = time.perf_counter()

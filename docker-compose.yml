@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  # Dich vu API don gian (FastAPI tai port 8000)
+  api:
+    build: .
+    container_name: alpr_api
+    ports:
+      - "8000:8000"
+    command: python -m src serve --host 0.0.0.0 --port 8000
+    restart: unless-stopped
+
+  # Dich vu Giao dien Web (Streamlit Dashboard tai port 8501)
+  ui:
+    build: .
+    container_name: alpr_ui
+    ports:
+      - "8501:8501"
+    command: streamlit run app.py --server.port 8501 --server.address 0.0.0.0
+    restart: unless-stopped

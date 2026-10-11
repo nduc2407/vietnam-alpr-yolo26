@@ -1,8 +1,4 @@
-"""Train YOLO26 phat hien bien so.
-
-Chay:
-    python -m src.training.train --epochs 100 --batch 16
-"""
+"""Huấn luyện mô hình YOLO26 phát hiện biển số xe."""
 import argparse
 import shutil
 from pathlib import Path

@@ -1,13 +1,5 @@
-"""Do chinh xac OCR (exact-match, CER) co/khong tien xu ly anh bien.
+"""Đo độ chính xác OCR (exact-match, CER) có và không có tiền xử lý."""
 
-Can file CSV nhan chuoi bien so that (cot: image,plate). Anh bien duoc cat theo bbox GT trong
-file nhan YOLO nen ket qua khong phu thuoc detector.
-
-Tao khung CSV de dien tay:
-    python -m src ocr-eval --template 100 --split test
-Chay danh gia:
-    python -m src ocr-eval --csv experiments/ocr_gt.csv --split test
-"""
 import argparse
 import csv
 import json
@@ -60,19 +52,42 @@ def evaluate_ocr(gt_csv, split="test", dataset_dir=DATASET_DIR, ocr_factory=None
         img = cv2.imread(str(p))
         crop = crop_from_label(img, lbl_dir / f"{p.stem}.txt") if img is not None else None
         if crop is not None:
-            samples.append((crop, normalize_plate(r["plate"])))
+            samples.append((p.name, crop, normalize_plate(r["plate"])))
 
     result = {"split": split, "samples": len(samples)}
+    eval_preds = {}
     for name, pre in (("without_preprocess", False), ("with_preprocess", True)):
         ocr = ocr_factory(pre)
-        preds = [ocr.read(c)[0] for c, _ in samples]
+        preds = [ocr.read(c)[0] for _, c, _ in samples]
+        eval_preds[name] = preds
         result[name] = {
-            "exact_match": round(sum(p == g for p, (_, g) in zip(preds, samples)) / len(samples), 4),
-            "mean_cer": round(sum(cer(p, g) for p, (_, g) in zip(preds, samples)) / len(samples), 4),
+            "exact_match": round(sum(p == g for p, (_, _, g) in zip(preds, samples)) / len(samples), 4),
+            "mean_cer": round(sum(cer(p, g) for p, (_, _, g) in zip(preds, samples)) / len(samples), 4),
         }
+
+    # Xuat file CSV chi tiet so sanh tung anh
     EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
+    csv_out = EXPERIMENTS_DIR / "ocr_results.csv"
+    with csv_out.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            "image", "ground_truth",
+            "pred_without_preprocess", "cer_without_preprocess",
+            "pred_with_preprocess", "cer_with_preprocess"
+        ])
+        writer.writeheader()
+        for (img_name, _, gt), p_raw, p_pre in zip(samples, eval_preds["without_preprocess"], eval_preds["with_preprocess"]):
+            writer.writerow({
+                "image": img_name,
+                "ground_truth": gt,
+                "pred_without_preprocess": p_raw,
+                "cer_without_preprocess": round(cer(p_raw, gt), 4),
+                "pred_with_preprocess": p_pre,
+                "cer_with_preprocess": round(cer(p_pre, gt), 4),
+            })
+
     (EXPERIMENTS_DIR / "ocr_eval.json").write_text(json.dumps(result, indent=2))
     print(json.dumps(result, indent=2))
+    print(f"Da luu bang so sanh chi tiet: {csv_out}")
     return result
 
 

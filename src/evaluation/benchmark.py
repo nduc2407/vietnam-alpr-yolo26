@@ -1,9 +1,4 @@
-"""Do do tre (latency) va FPS.
-
-Chay:
-    python -m src bench --n 100            # chi detector (preprocess + detect)
-    python -m src bench --n 100 --full     # ca pipeline gom OCR
-"""
+"""Đo độ trễ (latency) và FPS của hệ thống ALPR."""
 import argparse
 import json
 import time

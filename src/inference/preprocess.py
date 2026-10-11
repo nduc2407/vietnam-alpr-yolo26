@@ -1,15 +1,4 @@
-"""Tien xu ly anh (ImagePreprocessor) - ghep tu module cua nhom + cac sua loi da kiem chung.
-
-Hai tang:
-  1) Anh dau vao : decode, doi kenh, resize giu ti le, CLAHE (tuy chon)
-  2) Anh bien cat: phong to + nan nghieng (enhance_roi) roi khu nhieu/CLAHE/lam net (prepare_plate_crop)
-
-
- 
-  - auto_deskew dung Hough tren cac duong thang ngang (vien/duong chu) lam chinh, minAreaRect chi la du phong:
-    minAreaRect tren nhi phan Otsu cho goc 0 voi anh cat tu YOLO (bbox chua nen toi o 4 goc).
-  - max_angle mac dinh 20 do (45 qua rong: uoc luong sai se lam hong anh bien).
-"""
+"""Tiền xử lý ảnh đầu vào và ảnh crop biển số xe (chuẩn hóa kích thước, deskew, cân bằng sáng)."""
 from typing import Optional, Tuple, Union
 
 import cv2
@@ -39,11 +28,7 @@ def enhance_contrast(image: np.ndarray, clip: float = 2.0, grid: int = 8) -> np.
 
 
 def auto_adaptive_lighting(image: np.ndarray) -> np.ndarray:
-    """Tu dong can bang sang thich ung:
-    - Anh toi (L < 85): Gamma correction (<1.0) + CLAHE de kich sang ro chu
-    - Anh choi/sang (L > 175): Gamma correction (>1.0) de giu net chu dam
-    - Anh binh thuong: CLAHE nhe de giu nguyen chi tiet tu nhien.
-    """
+    """Tự động cân bằng sáng thích ứng cho ảnh biển số xe."""
     image = to_bgr(image)
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     l_ch, a_ch, b_ch = cv2.split(lab)
