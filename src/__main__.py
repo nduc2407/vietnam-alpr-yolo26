@@ -1,22 +1,22 @@
-"""Diem vao chung: python -m src <lenh> [tham so]
-
-Lenh:
-  download   tai dataset tu Roboflow API
-  check      kiem tra / sua label + sinh data.resolved.yaml
-  train      train YOLO26
-  eval       danh gia (valid/test)
-  ocr-eval   do chinh xac OCR (exact-match, CER) co/khong tien xu ly
-  sweep      quet nguong conf + NMS (precision/recall/F1)
-  bench      do do tre / FPS (them --full de gom OCR)
-  infer      chay ALPR tren anh / thu muc / webcam
-  serve      chay REST API (FastAPI)
-  ui         chay Web UI (Streamlit)
-Xem tham so cua tung lenh: python -m src <lenh> --help
+"""Điểm vào thực thi các module của hệ thống ALPR:
+  download   Tải dataset từ Roboflow API
+  merge      Gộp dữ liệu tự thu thập vào dataset YOLO
+  check      Kiểm tra và chuẩn hóa nhãn YOLO
+  train      Huấn luyện mô hình YOLO26
+  eval       Đánh giá mô hình trên tập kiểm thử
+  ocr-eval   Đo lường độ chính xác mô-đun OCR độc lập
+  sweep      Phân tích thực nghiệm ngưỡng tin cậy và NMS
+  bench      Đo độ trễ và FPS của hệ thống
+  report     Tổng hợp số liệu và sinh báo cáo kết quả
+  infer      Suy luận nhận diện biển số
+  serve      Khởi chạy REST API
+  ui         Khởi chạy giao diện Web
 """
 import sys
 
 COMMANDS = {
     "download": "src.data.download",
+    "merge": "src.data.merge",
     "check": "src.data.dataset",
     "train": "src.training.train",
     "eval": "src.evaluation.evaluate",
@@ -36,7 +36,7 @@ def serve(argv):
     ap.add_argument("--host", default="0.0.0.0")
     ap.add_argument("--port", type=int, default=8000)
     a = ap.parse_args(argv)
-    uvicorn.run("src.backend.app:app", host=a.host, port=a.port)
+    uvicorn.run("src.api:app", host=a.host, port=a.port)
 
 
 def run_ui(argv):

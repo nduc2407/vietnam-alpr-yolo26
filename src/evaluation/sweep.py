@@ -1,11 +1,5 @@
-"""Phan tich nguong tin cay (confidence) va NMS bang so lieu thuc nghiem.
+"""Phân tích thực nghiệm ngưỡng tin cậy (Confidence) và NMS."""
 
-Voi moi che do (end2end khong NMS | one-to-many + NMS voi cac muc IoU) va moi nguong conf,
-tinh TP/FP/FN (ghep GT theo IoU>=0.5) -> precision, recall, F1. Luu CSV + JSON.
-
-Chay:
-    python -m src sweep --split test
-"""
 import argparse
 import csv
 import json

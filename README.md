@@ -18,15 +18,26 @@ python -m src download                       # -> data/biensoxe
 python -m src train --epochs 50 --batch 8 --workers 2       # -> models/best.pt
 
 python -m src eval --split test              # P, R, F1, mAP
-python -m src eval --split test --nms        # đường NMS (end2end=False)
 python -m src sweep --split test             # quét ngưỡng conf và NMS
-python -m src ocr-eval --template 100        # tạo CSV để điền chuỗi biển số thật, rồi: python -m src ocr-eval
-python -m src bench --n 100 --full           # độ trễ từng bước + FPS
+python -m src ocr-eval                       # đo chính xác OCR (exact-match, CER)
+python -m src bench --n 50                   # độ trễ từng bước + FPS
 python -m src report                         # gom số liệu -> docs/RESULTS.md
 
 python -m src infer --source data\sample\images --save out
 python -m src serve                          # API tại :8000
+python -m src ui                             # Web Dashboard tại :8501
 ```
+
+## Chạy bằng Docker (1 lệnh duy nhất)
+
+Dành cho giám khảo hoặc triển khai nhanh không cần cài Python/CUDA trên máy:
+
+```powershell
+docker compose up
+```
+* **API Service:** `http://localhost:8000/docs` (Swagger UI)
+* **Web UI Dashboard:** `http://localhost:8501` (Kéo thả ảnh nhận dạng trực quan)
+
 
 ## Cấu trúc
 
@@ -37,7 +48,7 @@ src/
   training/train.py       huấn luyện YOLO26
   evaluation/             evaluate.py · sweep.py (conf/NMS) · ocr_eval.py · benchmark.py (latency/FPS) · report.py
   inference/              preprocess.py (ImagePreprocessor) · detector.py · postprocess.py (PostProcessor) · ocr.py (PaddleOCR) · pipeline.py
-  backend/app.py          FastAPI (xác thực, giới hạn upload, rate limit)
+  api.py                  FastAPI đơn giản: nhận ảnh, kiểm tra đầu vào, trả kết quả và đo độ trễ
 tests/                    pytest
 data/sample/              ảnh mẫu TỔNG HỢP để chạy thử (không dùng để huấn luyện)
 ## Tiền xử lý và hậu xử lý

@@ -1,6 +1,4 @@
-"""Root entrypoint for Streamlit UI:
-    streamlit run app.py
-"""
+"""Entrypoint khởi chạy Web UI Streamlit."""
 import sys
 from pathlib import Path
 

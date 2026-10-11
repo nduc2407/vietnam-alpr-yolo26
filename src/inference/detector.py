@@ -1,8 +1,4 @@
-"""Phat hien bien so bang YOLO26 (YOLO -> PostProcessor -> RawDetection).
-
-Luu y: YOLO26 mac dinh la end-to-end (NMS-free). Dat end2end=False de dung head one-to-many
-kem NMS truyen thong (tham so `iou` luc nay moi co tac dung).
-"""
+"""Phát hiện vị trí biển số xe sử dụng mô hình YOLO26."""
 from pathlib import Path
 
 import numpy as np

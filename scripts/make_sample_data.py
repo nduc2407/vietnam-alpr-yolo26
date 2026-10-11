@@ -1,8 +1,4 @@
-"""Sinh du lieu MAU TONG HOP (anh bien so ve bang OpenCV) de chay thu/CI ma khong can dataset that.
-Day KHONG phai du lieu huan luyen. Thay bang vai anh that cua nhom khi demo.
-
-    python scripts/make_sample_data.py
-"""
+"""Sinh dữ liệu ảnh biển số mẫu phục vụ kiểm thử và demo nhanh."""
 from pathlib import Path
 
 import cv2

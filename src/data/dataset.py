@@ -1,19 +1,11 @@
-"""Kiem tra / sua nhan YOLO va tao data.yaml voi duong dan tuyet doi.
-
-Dinh dang detection: `cls cx cy w h` (5 so).
-Nhan polygon (cls x1 y1 x2 y2 ...) bi lan vao se duoc chuyen thanh bbox.
-
-Chay:
-    python -m src.data.dataset --scan
-    python -m src.data.dataset --fix
-"""
+"""Kiểm tra, chuẩn hóa nhãn YOLO và tạo data.yaml với đường dẫn tuyệt đối."""
 import argparse
 import shutil
 from pathlib import Path
 
 import yaml
 
-from src.config import DATA_YAML, DATA_YAML_RESOLVED, DATASET_DIR
+from src.config import DATASET_DIR
 
 SPLITS = ("train", "valid", "test")
 
@@ -94,12 +86,14 @@ def fix_labels(root=DATASET_DIR, backup=True):
     return stats
 
 
-def make_data_yaml(root=DATASET_DIR, src_yaml=DATA_YAML, out_yaml=DATA_YAML_RESOLVED):
+def make_data_yaml(root=DATASET_DIR, src_yaml=None, out_yaml=None):
     """Sinh data.resolved.yaml de tranh loi duong dan tuong doi cua Roboflow."""
     root = Path(root).resolve()
+    src_p = Path(src_yaml) if src_yaml is not None else (root / "data.yaml")
+    out_p = Path(out_yaml) if out_yaml is not None else (root / "data.resolved.yaml")
     names = ["BienSoXe"]
-    if Path(src_yaml).exists():
-        cfg = yaml.safe_load(Path(src_yaml).read_text()) or {}
+    if src_p.exists():
+        cfg = yaml.safe_load(src_p.read_text(encoding="utf-8")) or {}
         names = cfg.get("names", names)
     if isinstance(names, dict):
         names = [names[k] for k in sorted(names)]
@@ -112,8 +106,9 @@ def make_data_yaml(root=DATASET_DIR, src_yaml=DATA_YAML, out_yaml=DATA_YAML_RESO
     }
     if (root / "test" / "images").exists():
         data["test"] = "test/images"
-    Path(out_yaml).write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True))
-    return Path(out_yaml)
+    out_p.parent.mkdir(parents=True, exist_ok=True)
+    out_p.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True), encoding="utf-8")
+    return out_p
 
 
 def main():

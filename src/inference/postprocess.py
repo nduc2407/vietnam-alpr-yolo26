@@ -1,8 +1,4 @@
-"""Hau xu ly: boc tach bounding box, cat ROI an toan va encode Base64 (module cua nhom + sua nho).
-
-Khac ban goc: crop_roi tra ve BAN SAO (khong giu tham chieu toi ca anh goc), RawDetection co to_dict()
-de tra JSON (ndarray khong serialize duoc), ket qua sap xep theo do tin cay giam dan, kiem tra rong an toan.
-"""
+"""Hậu xử lý kết quả phát hiện: bóc tách bounding box, crop ROI biển số và encode Base64."""
 import base64
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional

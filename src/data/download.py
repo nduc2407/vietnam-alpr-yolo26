@@ -1,12 +1,4 @@
-"""Tai dataset tu Roboflow roi tu dong sua label + sinh data.resolved.yaml.
-
-API key lay o: Roboflow -> Settings -> API Keys. KHONG hard-code key vao code.
-    Windows (PowerShell):  $env:ROBOFLOW_API_KEY="xxxx"
-
-Chay (mac dinh lay thong tin trong src/config.py):
-    python -m src.data.download
-    python -m src.data.download --version 1
-"""
+"""Tải dataset từ Roboflow API và tự động chuẩn hóa nhãn cho YOLO."""
 import argparse
 import os
 

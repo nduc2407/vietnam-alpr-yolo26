@@ -1,9 +1,4 @@
-"""Danh gia model tren tap valid/test: precision, recall, F1, mAP50, mAP50-95.
-
-Chay:
-    python -m src eval --split test
-    python -m src eval --split test --nms --iou 0.5      # duong NMS (end2end=False)
-"""
+"""Đánh giá mô hình trên tập valid/test (Precision, Recall, F1, mAP50, mAP50-95)."""
 import argparse
 import json
 
