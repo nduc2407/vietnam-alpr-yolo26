@@ -1,0 +1,12 @@
+{
+  "split": "test",
+  "samples": 55,
+  "without_preprocess": {
+    "exact_match": 0.7273,
+    "mean_cer": 0.1184
+  },
+  "with_preprocess": {
+    "exact_match": 0.6545,
+    "mean_cer": 0.1316
+  }
+}

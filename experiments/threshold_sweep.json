@@ -1,0 +1,489 @@
+{
+  "split": "test",
+  "clahe": false,
+  "images": 53,
+  "best_by_f1": {
+    "end2end (NMS-free)": {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.8,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    "NMS iou=0.3": {
+      "mode": "NMS iou=0.3",
+      "conf": 0.8,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    "NMS iou=0.5": {
+      "mode": "NMS iou=0.5",
+      "conf": 0.8,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    "NMS iou=0.7": {
+      "mode": "NMS iou=0.7",
+      "conf": 0.8,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    }
+  },
+  "rows": [
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.05,
+      "precision": 0.9464,
+      "recall": 0.9815,
+      "f1": 0.9636,
+      "tp": 53,
+      "fp": 3,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.1,
+      "precision": 0.9464,
+      "recall": 0.9815,
+      "f1": 0.9636,
+      "tp": 53,
+      "fp": 3,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.2,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.25,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.3,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.4,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.5,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.6,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.7,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.8,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "mode": "end2end (NMS-free)",
+      "conf": 0.9,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.05,
+      "precision": 0.9464,
+      "recall": 0.9815,
+      "f1": 0.9636,
+      "tp": 53,
+      "fp": 3,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.1,
+      "precision": 0.9464,
+      "recall": 0.9815,
+      "f1": 0.9636,
+      "tp": 53,
+      "fp": 3,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.2,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.25,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.3,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.4,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.5,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.6,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.7,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.8,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.3",
+      "conf": 0.9,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.05,
+      "precision": 0.9464,
+      "recall": 0.9815,
+      "f1": 0.9636,
+      "tp": 53,
+      "fp": 3,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.1,
+      "precision": 0.9464,
+      "recall": 0.9815,
+      "f1": 0.9636,
+      "tp": 53,
+      "fp": 3,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.2,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.25,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.3,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.4,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.5,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.6,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.7,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.8,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.5",
+      "conf": 0.9,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.05,
+      "precision": 0.9464,
+      "recall": 0.9815,
+      "f1": 0.9636,
+      "tp": 53,
+      "fp": 3,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.1,
+      "precision": 0.9464,
+      "recall": 0.9815,
+      "f1": 0.9636,
+      "tp": 53,
+      "fp": 3,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.2,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.25,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.3,
+      "precision": 0.9636,
+      "recall": 0.9815,
+      "f1": 0.9725,
+      "tp": 53,
+      "fp": 2,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.4,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.5,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.6,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.7,
+      "precision": 0.9815,
+      "recall": 0.9815,
+      "f1": 0.9815,
+      "tp": 53,
+      "fp": 1,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.8,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "mode": "NMS iou=0.7",
+      "conf": 0.9,
+      "precision": 1.0,
+      "recall": 0.9815,
+      "f1": 0.9907,
+      "tp": 53,
+      "fp": 0,
+      "fn": 1
+    }
+  ]
+}

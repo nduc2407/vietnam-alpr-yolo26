@@ -8,5 +8,4 @@ __pycache__/
 data/*
 !data/sample/
 !data/own_manifest.csv
-experiments/
 out/
