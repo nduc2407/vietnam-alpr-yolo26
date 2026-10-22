@@ -6,21 +6,21 @@
   "end2end": true,
   "stages": {
     "preprocess": {
-      "mean_ms": 0.01,
-      "p50_ms": 0.01,
+      "mean_ms": 0.0,
+      "p50_ms": 0.0,
       "p95_ms": 0.01
     },
     "detect": {
-      "mean_ms": 27.55,
-      "p50_ms": 20.33,
-      "p95_ms": 78.9
+      "mean_ms": 24.17,
+      "p50_ms": 19.98,
+      "p95_ms": 36.37
     },
     "total": {
-      "mean_ms": 27.56,
-      "p50_ms": 20.34,
-      "p95_ms": 78.95
+      "mean_ms": 24.18,
+      "p50_ms": 19.99,
+      "p95_ms": 36.38
     }
   },
-  "fps": 36.3,
-  "measured_at": "2026-10-08 20:19:47"
+  "fps": 41.4,
+  "measured_at": "2026-10-22 14:16:39"
 }

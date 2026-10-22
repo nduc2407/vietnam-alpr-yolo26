@@ -37,14 +37,14 @@ def auto_adaptive_lighting(image: np.ndarray) -> np.ndarray:
     if mean_l < 85:
         # Anh toi -> kich sang
         gamma = max(0.45, mean_l / 110.0)
-        inv_gamma = 1.0 / gamma
+        inv_gamma = gamma
         table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in range(256)]).astype("uint8")
         l_ch = cv2.LUT(l_ch, table)
         l_ch = cv2.createCLAHE(clipLimit=2.2, tileGridSize=(8, 8)).apply(l_ch)
     elif mean_l > 175:
         # Anh choi / nguoc sang -> giam sang de lay lai do tuong phan
         gamma = min(1.6, mean_l / 140.0)
-        inv_gamma = 1.0 / gamma
+        inv_gamma= gamma
         table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in range(256)]).astype("uint8")
         l_ch = cv2.LUT(l_ch, table)
         l_ch = cv2.createCLAHE(clipLimit=1.8, tileGridSize=(8, 8)).apply(l_ch)
@@ -154,7 +154,7 @@ class ImagePreprocessor:
 
 
 # ---------------------------------------------------------------- ham tien ich cho pipeline
-def deskew(image: np.ndarray, max_angle: float = MAX_DESKEW_ANGLE, min_angle: float = 0.5) -> np.ndarray:
+def deskew(image: np.ndarray, max_angle: float = MAX_DESKEW_ANGLE, min_angle: float = 3.0) -> np.ndarray:
     return ImagePreprocessor.auto_deskew(image, max_angle, min_angle)
 
 

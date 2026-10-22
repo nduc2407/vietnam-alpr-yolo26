@@ -1,12 +1,12 @@
 {
   "split": "test",
-  "samples": 55,
+  "samples": 53,
   "without_preprocess": {
-    "exact_match": 0.7273,
-    "mean_cer": 0.1184
+    "exact_match": 0.7736,
+    "mean_cer": 0.0789
   },
   "with_preprocess": {
-    "exact_match": 0.6545,
-    "mean_cer": 0.1316
+    "exact_match": 0.6981,
+    "mean_cer": 0.092
   }
 }
