@@ -7,7 +7,6 @@
   ocr-eval   Đo lường độ chính xác mô-đun OCR độc lập
   sweep      Phân tích thực nghiệm ngưỡng tin cậy và NMS
   bench      Đo độ trễ và FPS của hệ thống
-  report     Tổng hợp số liệu và sinh báo cáo kết quả
   infer      Suy luận nhận diện biển số
   serve      Khởi chạy REST API
   ui         Khởi chạy giao diện Web
@@ -23,7 +22,6 @@ COMMANDS = {
     "ocr-eval": "src.evaluation.ocr_eval",
     "sweep": "src.evaluation.sweep",
     "bench": "src.evaluation.benchmark",
-    "report": "src.evaluation.report",
     "infer": "src.inference.pipeline",
 }
 

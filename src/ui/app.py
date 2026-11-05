@@ -1,5 +1,4 @@
 import sys
-import tempfile
 import time
 from pathlib import Path
 
@@ -221,78 +220,6 @@ def tab_image(pipeline: ALPRPipeline):
                     st.markdown("---")
 
 
-def tab_video(pipeline: ALPRPipeline):
-    st.subheader("🎥 Nhận diện biển số từ Video")
-    uploaded_video = st.file_uploader("Tải lên file video (.mp4, .avi, .mov):", type=["mp4", "avi", "mov", "mkv"])
-
-    if uploaded_video is not None:
-        tfile = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
-        tfile.write(uploaded_video.read())
-        tfile.flush()
-
-        cap = cv2.VideoCapture(tfile.name)
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        fps = cap.get(cv2.CAP_PROP_FPS) or 25.0
-
-        c_opt1, c_opt2 = st.columns(2)
-        with c_opt1:
-            frame_skip = st.slider("Xử lý mỗi N frame (tăng tốc):", min_value=1, max_value=10, value=2)
-        with c_opt2:
-            max_frames = st.slider("Giới hạn số frame xử lý:", min_value=30, max_value=max(100, total_frames), value=min(300, total_frames))
-
-        start_btn = st.button("🚀 Bắt đầu xử lý Video", type="primary")
-
-        if start_btn:
-            progress_bar = st.progress(0)
-            status_text = st.empty()
-            video_placeholder = st.empty()
-            table_placeholder = st.empty()
-
-            detected_plates_history = []
-            seen_plates = set()
-
-            frame_idx = 0
-            processed_count = 0
-            start_time = time.time()
-
-            while cap.isOpened() and processed_count < max_frames:
-                ret, frame = cap.read()
-                if not ret:
-                    break
-
-                if frame_idx % frame_skip == 0:
-                    processed_count += 1
-                    plates, timing, annotated_bgr = process_image(frame, pipeline)
-                    annotated_rgb = cv2.cvtColor(annotated_bgr, cv2.COLOR_BGR2RGB)
-                    video_placeholder.image(annotated_rgb, caption=f"Frame {frame_idx}/{total_frames}", use_container_width=True)
-
-                    for p in plates:
-                        plate_str = p.get("plate_formatted", "")
-                        if plate_str and plate_str not in seen_plates:
-                            seen_plates.add(plate_str)
-                            detected_plates_history.append({
-                                "Frame": frame_idx,
-                                "Thời gian (s)": round(frame_idx / fps, 2),
-                                "Biển số": plate_str,
-                                "Độ tin cậy Detect": f"{p['det_conf']*100:.1f}%",
-                                "Độ tin cậy OCR": f"{p.get('ocr_conf', 0)*100:.1f}%",
-                                "Hợp lệ": "✓" if p.get("valid", True) else "⚠",
-                            })
-
-                    if detected_plates_history:
-                        df = pd.DataFrame(detected_plates_history)
-                        table_placeholder.dataframe(df, use_container_width=True)
-
-                frame_idx += 1
-                progress = min(1.0, processed_count / max_frames)
-                progress_bar.progress(progress)
-                elapsed = time.time() - start_time
-                status_text.text(f"Đang xử lý: {processed_count}/{max_frames} frames | Tốc độ: {round(processed_count / max(elapsed, 0.1), 1)} FPS")
-
-            cap.release()
-            st.success(f"Hoàn thành! Đã phát hiện {len(seen_plates)} biển số khác nhau.")
-
-
 def tab_webcam(pipeline: ALPRPipeline):
     st.subheader("📹 Nhận diện qua Webcam / Live Camera")
 
@@ -368,13 +295,11 @@ def main():
         return
 
     # Tabs
-    tab1, tab2, tab3 = st.tabs(["🖼️ Ảnh (Images)", "🎥 Video", "📹 Webcam / Live Camera"])
+    tab1, tab2 = st.tabs(["🖼️ Ảnh (Images)", "📹 Webcam / Live Camera"])
 
     with tab1:
         tab_image(pipeline)
     with tab2:
-        tab_video(pipeline)
-    with tab3:
         tab_webcam(pipeline)
 
 
