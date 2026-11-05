@@ -1,0 +1,31 @@
+{
+  "mode": "full (preprocess+detect+OCR)",
+  "device": "CPU: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz",
+  "images": 50,
+  "warmup": 5,
+  "end2end": true,
+  "stages": {
+    "preprocess": {
+      "mean_ms": 0.01,
+      "p50_ms": 0.01,
+      "p95_ms": 0.01
+    },
+    "detect": {
+      "mean_ms": 145.79,
+      "p50_ms": 145.5,
+      "p95_ms": 173.35
+    },
+    "ocr": {
+      "mean_ms": 127.95,
+      "p50_ms": 105.84,
+      "p95_ms": 237.94
+    },
+    "total": {
+      "mean_ms": 273.75,
+      "p50_ms": 252.46,
+      "p95_ms": 385.78
+    }
+  },
+  "fps": 3.7,
+  "measured_at": "2026-11-05 23:57:55"
+}

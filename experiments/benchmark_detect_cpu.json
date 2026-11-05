@@ -1,0 +1,26 @@
+{
+  "mode": "detector (preprocess+detect)",
+  "device": "CPU: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz",
+  "images": 53,
+  "warmup": 5,
+  "end2end": true,
+  "stages": {
+    "preprocess": {
+      "mean_ms": 0.01,
+      "p50_ms": 0.01,
+      "p95_ms": 0.01
+    },
+    "detect": {
+      "mean_ms": 67.18,
+      "p50_ms": 66.91,
+      "p95_ms": 70.25
+    },
+    "total": {
+      "mean_ms": 67.2,
+      "p50_ms": 66.92,
+      "p95_ms": 70.26
+    }
+  },
+  "fps": 14.9,
+  "measured_at": "2026-11-05 23:51:45"
+}
