@@ -17,10 +17,10 @@ IMG_EXT = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
 class ALPRPipeline:
     def __init__(self, weights=BEST_MODEL, conf=CONF_THRES, iou=IOU_THRES, use_ocr=True,
-                 enhance=None, max_side=1280, end2end=True, detector=None, ocr=None):
+                 enhance=None, max_side=1280, end2end=True, detector=None, ocr=None, device=None):
         """Khởi tạo pipeline ALPR hoàn chỉnh."""
-        self.detector = detector or PlateDetector(weights, conf=conf, iou=iou, end2end=end2end)
-        self.ocr = ocr if ocr is not None else (PlateOCR().load() if use_ocr else None)
+        self.detector = detector or PlateDetector(weights, conf=conf, iou=iou, end2end=end2end, device=device)
+        self.ocr = ocr if ocr is not None else (PlateOCR(device=device).load() if use_ocr else None)
         if enhance is None:
             enhance = os.environ.get("PREPROCESS_CLAHE", "0") == "1"
         self.enhance, self.max_side = enhance, max_side
