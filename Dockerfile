@@ -11,11 +11,16 @@ WORKDIR /app
 
 # Copy file requirements truoc de tan dung Docker cache layer
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy ma nguon va model da huan luyen
+# Nang cap pip va cai dat Torch CPU truoc (nhe ~180MB thay vi ~900MB, tranh nghien mang)
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --default-timeout=1000 torch torchvision --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir --default-timeout=1000 --retries 5 -r requirements.txt
+
+# Copy ma nguon, model da huan luyen va anh mau
 COPY src/ src/
 COPY models/ models/
+COPY data/sample/ data/sample/
 COPY app.py .
 
 # Mo port cho ca API (8000) va Streamlit UI (8501)

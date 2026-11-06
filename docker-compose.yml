@@ -4,6 +4,7 @@ services:
   # Dich vu API don gian (FastAPI tai port 8000)
   api:
     build: .
+    image: vietnam-alpr:latest
     container_name: alpr_api
     ports:
       - "8000:8000"
@@ -12,9 +13,11 @@ services:
 
   # Dich vu Giao dien Web (Streamlit Dashboard tai port 8501)
   ui:
-    build: .
+    image: vietnam-alpr:latest
     container_name: alpr_ui
     ports:
       - "8501:8501"
     command: streamlit run app.py --server.port 8501 --server.address 0.0.0.0
     restart: unless-stopped
+    depends_on:
+      - api
