@@ -32,13 +32,13 @@
 
 ---
 
-## 2. Danh sách thành viên và phân công (Nhóm 21)
+## 2. Danh sách thành viên (Nhóm 21)
 
-| STT | Họ và tên | Mã sinh viên (MSSV) | Vai trò & Trách nhiệm chính trong đồ án |
-| :---: | :--- | :---: | :--- |
-| **1** | **Đặng Nhật Đức** | **3123410082** | **Trưởng nhóm & Kỹ sư Học máy (ML Engineer):**<br>• Quản trị kho mã nguồn GitHub, cấu trúc dự án.<br>• Huấn luyện mô hình YOLO26n phát hiện biển số, tối ưu hóa siêu tham số.<br>• Xây dựng Backend REST API bằng FastAPI (`src/api.py`).<br>• Thực hiện đo kiểm hiệu năng suy luận, đo FPS và Benchmark CPU/GPU. |
-| **2** | **Phan Thanh Tùng** | **3123410417** | **Kỹ sư Xử lý ảnh & Ứng dụng (Computer Vision & Frontend):**<br>• Nghiên cứu giải thuật tiền xử lý: Nắn nghiêng Hough (`HoughLinesP Deskew`), tách biển 2 dòng xe máy.<br>• Tích hợp mô-đun nhận dạng ký tự quang học độc lập với PaddleOCR (`PP-OCRv5`).<br>• Xây dựng ma trận quy tắc ngữ pháp sửa lỗi nhầm chữ/số theo quy chuẩn Việt Nam.<br>• Thiết kế và phát triển Giao diện Web tương tác trực quan bằng Streamlit (`src/ui/app.py`).<br>• Xây dựng bộ dữ liệu và đánh giá thực nghiệm mô-đun OCR độc lập (`Exact Match`, `CER`). |
-| **3** | **Võ Văn Tuấn** | **3123410414** | **Kỹ sư Dữ liệu & Đảm bảo chất lượng (Data & QA/DevOps):**<br>• Thu thập hình ảnh thực tế, tiền xử lý và gán nhãn tập dữ liệu trên Roboflow (1.262 ảnh).<br>• Xây dựng mô hình đối chứng Baseline YOLOv8 để làm cơ sở so sánh ablation.<br>• Xây dựng bộ kiểm thử tự động Unit Tests với `pytest` (10 tệp kiểm thử, 31 test cases).<br>• Đóng gói toàn bộ hệ thống bằng Docker, Docker Compose và viết tài liệu báo cáo. |
+| STT | Họ và tên | Mã sinh viên (MSSV) |
+| :---: | :--- | :---: |
+| 1 | **Đặng Nhật Đức** | 3123410082 |
+| 2 | **Phan Thanh Tùng** | 3123410417 |
+| 3 | **Võ Văn Tuấn** | 3123410414 |
 
 ---
 
@@ -67,7 +67,7 @@ Trước khi tiến hành cài đặt và chạy ứng dụng, môi trường m�
 4. **Phần cứng (Khuyến nghị):**
    * *Chạy GPU:* NVIDIA GTX 1650 (4GB VRAM) trở lên và đã cài NVIDIA CUDA Toolkit + cuDNN (đạt tốc độ ~36.3 FPS).
    * *Chạy CPU:* Tối thiểu CPU 4 nhân (ví dụ: Intel Core i5-9300H hoặc tương đương, đạt tốc độ ~14.9 FPS).
-5. **Docker Desktop:** (Chỉ cần nếu chọn cách chạy bằng Docker, không cần cài đặt Python/CUDA).
+5. **Docker Desktop:** Chỉ cần nếu chọn cách chạy bằng Docker, không cần cài đặt Python/CUDA.
 
 ---
 
